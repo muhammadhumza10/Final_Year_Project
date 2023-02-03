@@ -1,0 +1,174 @@
+{products.map((product) => (
+            <TableRow key={product.name}>
+              <TableCell>
+                <Typography
+                  sx={{
+                    fontSize: "15px",
+                    fontWeight: "500",
+                  }}
+                >
+                  {product.id}
+                </Typography>
+              </TableCell>
+              <TableCell>
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                >
+                  <Box>
+                    <Typography
+                      variant="h6"
+                      sx={{
+                        fontWeight: "600",
+                      }}
+                    >
+                      {product.name}
+                    </Typography>
+                    
+                  </Box>
+                </Box>
+              </TableCell>
+              <TableCell>
+                <Typography color="textSecondary" variant="h6">
+                  {product.pname}
+                </Typography>
+              </TableCell>
+                    <TableCell>
+                      <Typography variant="h6">${product.budget}k</Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Typography variant="h6">${product.budget}k</Typography>
+                    </TableCell>
+              <TableCell>
+              <Typography variant="h6">Black</Typography>
+              </TableCell>
+              <TableCell>
+                <Link  style={{textDecoration:"none"}}>
+                  
+                <Chip
+                  sx={{
+                    pl: "4px",
+                    pr: "4px",
+                    backgroundColor: "error.main",
+                    color: "#fff",
+                    cursor:"pointer"
+                  }}
+                  size="medium"
+                  icon={<DeleteIcon fontSize="small" style={{color:"#fff"}}/>}
+                  label="Delete"
+                ></Chip>
+                </Link>
+              </TableCell>
+              <TableCell>
+                <Link  style={{textDecoration:"none"}}>
+                  
+                <Chip
+                  sx={{
+                    pl: "4px",
+                    pr: "4px",
+                    backgroundColor: "success.main",
+                    color: "#fff",
+                    cursor:"pointer"
+                  }}
+                  size="medium"
+                  icon={<VisibilityIcon fontSize="small" style={{color:"#fff"}}/>}
+                  label="View"
+                ></Chip>
+                </Link>
+              </TableCell>
+            </TableRow>
+          ))}
+
+
+
+
+
+
+
+          if(!localStorage.getItem('sellertoken')){
+      router.push('/login')
+    }
+    else{
+      
+      const fetchmyproducts = async (e) => {
+      let a = await fetch("http://localhost:3000/api/myproducts", {
+          method: "POST", // or 'PUT'
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ userid: user._id }),
+        });
+        let res = await a.json();
+        setProducts(res.products);
+        
+      }
+      fetchmyproducts();
+    }
+
+
+
+
+
+
+
+    let a = await fetch("http://localhost:3000/api/myproducts", {
+          method: "POST", // or 'PUT'
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ userid: userid }),
+        });
+        let products = await a.json();
+
+
+
+
+
+
+
+
+
+
+
+
+        async (e) => {
+                          let a = await fetch(
+                            "http://localhost:3000/api/deleteproduct",
+                            {
+                              method: "DELETE", // or 'PUT'
+                              headers: {
+                                "Content-Type": "application/json",
+                              },
+                              body: JSON.stringify({ productid: product._id }),
+                            }
+                          );
+                          let res = await a.json();
+                          if (res.success=="success") {
+            
+            
+                            toast.success("Your Product Has Been Deleted Successfully", {
+                              position: "bottom-left",
+                              autoClose: 5000,
+                              hideProgressBar: false,
+                              closeOnClick: true,
+                              pauseOnHover: true,
+                              draggable: true,
+                              progress: undefined,
+                            });
+                            setTimeout(() => {
+                              router.push("/seller/allproducts");
+                            }, 2000);
+                          } else {
+                            toast.error("Something Went Wrong! Please Try Again", {
+                              position: "bottom-left",
+                              autoClose: 5000,
+                              hideProgressBar: false,
+                              closeOnClick: true,
+                              pauseOnHover: true,
+                              draggable: true,
+                              progress: undefined,
+                            });
+                          }
+                        }

@@ -1,0 +1,299 @@
+// db.orders.aggregate( [
+//    // Stage 1: Filter pizza order documents by pizza size
+   
+//    // Stage 2: Group remaining documents by pizza name and calculate total quantity
+   
+//    {
+//       $group: { _id: "$product.selleremail", totalOrders: { $sum: 1 },totalValue: { $sum: "$total" } }
+//    },
+//    {
+//       /**
+//        * from: The target collection.
+//        * localField: The local join field.
+//        * foreignField: The target join field.
+//        * as: The name for the results.
+//        * pipeline: The pipeline to run on the joined collection.
+//        * let: Optional variables to use in the pipeline field stages.
+//        */
+//       $lookup: {
+//         from: 'users',
+//         localField: '_id',
+//         foreignField: 'email',
+//         as: 'seller'
+//       }
+//    },
+//    {
+//       /**
+//        * Provide any number of field/order pairs.
+//        */
+//       $sort: {
+//         totalOrders: -1
+//       }
+//    },
+//    { $limit: 2 }
+
+   
+// ] )
+
+
+
+
+
+// db.products.aggregate( [
+// {
+//    /**
+//     * query: The query in MQL.
+//     */
+//    $match: {
+//      "sellerid":"62b6094072a21d5d869b6a4f"
+//    }
+// },
+// {
+//       $group: { _id: "$sellerid", totalOrders: { $sum: 1 },totalValue: { $sum: "$total" } }
+//    }
+   
+   
+// ] )
+
+
+
+
+// db.orders.aggregate( [
+// {
+//    /**
+//     * query: The query in MQL.
+//     */
+//    $match: {
+//      "product.sellerid":"62b6094072a21d5d869b6a4f",
+//      "status":"Cancelled"
+//    }
+// },
+// {
+//       $group: { _id: "$product.sellerid", totalOrders: { $sum: 1 },totalValue: { $sum: "$total" },totalQuantity: { $sum: "$quantity" } }
+//    }
+   
+   
+// ] )
+
+// db.ratings.aggregate([
+//     {
+//    /**
+//     * query: The query in MQL.
+//     */
+//    $match: {
+//      "order.product._id":"631cfcea282f505409449a6b"
+//    }
+//     },
+//    {
+//      $group: { _id: "$rating", totalReviews: { $sum: 1 },totalStars: { $sum: "$rating" }}
+//    }
+
+// ])
+
+// db.orders.aggregate([
+//   // Stage 1: Filter pizza order documents by pizza size
+  
+//   // Stage 2: Group remaining documents by pizza name and calculate total quantity
+  
+//   {
+//      $group: { _id: "$product._id", totalOrders: { $sum: 1 } }
+//   },
+//   { "$project": { "productid": { "$toObjectId": "$_id" },totalOrders:1 } },
+//   { "$lookup": {
+//     "localField": "productid",
+//     "from": "products",
+//     "foreignField": "_id",
+//     "as": "product"
+//   }},
+//   // {$match: {product: {$ne: []}}}
+//   // {
+//   //    /**
+//   //     * Provide any number of field/order pairs.
+//   //     */
+//   //    $sort: {
+//   //      totalOrders: -1
+//   //    }
+//   // },
+//   // { $limit: 5 }
+
+  
+// ])
+
+
+// db.orders.aggregate([
+//   { "$project": { "productid": { "$toObjectId": "$product._id" } } },
+//   { "$lookup": {
+//     "localField": "productid",
+//     "from": "products",
+//     "foreignField": "_id",
+//     "as": "product"
+//   }}
+// ])
+
+
+// db.orders.aggregate([
+//   // Stage 1: Filter pizza order documents by pizza size
+  
+//   // Stage 2: Group remaining documents by pizza name and calculate total quantity
+//       {$match: {"product.sellerid": "63b97ed6e5238916e2a3d673"}},
+//   // {
+//   //    $group: { _id: "userid", totalOrders: { $sum: 1 } }
+//   // },
+//   // { "$project": { "productid": { "$toObjectId": "$_id" },totalOrders:1 } },
+//   { "$lookup": {
+//     "localField": "email",
+//     "from": "users",
+//     "foreignField": "email",
+//     "as": "user"
+//   }},
+//   {
+//      $group: { _id: "$user.gender", totalOrders: { $sum: 1 } }
+//   },
+//   {
+//     /**
+//      * specifications: The fields to
+//      *   include or exclude.
+//      */
+//     $project: {
+//       label:"$_id",
+//       value:"$totalOrders"
+//     }
+//   }
+//   // {$match: {product: {$ne: []}}}
+//   // {
+//   //    /**
+//   //     * Provide any number of field/order pairs.
+//   //     */
+//   //    $sort: {
+//   //      totalOrders: -1
+//   //    }
+//   // },
+//   // { $limit: 5 }
+
+  
+// ])
+
+
+// db.orders.aggregate([
+//       {$match: {"product.sellerid": "63b97ed6e5238916e2a3d673",createdAt:{$gte:ISODate("2023-01-01T00:00:01.000Z"),$lte:ISODate("2023-12-31T23:59:59.000Z")},status:{$ne:"Cancelled"}}},
+//   {
+//      $group: { _id: { $month: "$createdAt" }, totalSales: { $sum: "$total" }
+      
+    
+//   }},
+//   // { "$project": { "month":"$_id","value":"$totalSales" }},
+ 
+
+  
+// ])
+
+
+// db.orders.aggregate([
+//       {$match: {"product.sellerid": "63b97ed6e5238916e2a3d673"}},
+  
+  
+//   {
+//      $group: { _id: "$city", totalOrders: { $sum: 1 } }
+//   },
+//   {
+   
+//     $project: {
+//       label:"$_id",
+//       value:"$totalOrders"
+//     }
+//   },
+//   {
+     
+//      $sort: {
+//        label: 1
+//      }
+//   },
+
+  
+// ])
+
+// db.orders.aggregate([
+//       {$match: {"product.sellerid": "63b97ed6e5238916e2a3d673"}},
+  
+ 
+//   {
+//      $group: { _id: "$status", totalOrders: { $sum: 1 } }
+//   },
+//   {
+   
+//     $project: {
+//       label:"$_id",
+//       value:"$totalOrders"
+//     }
+//   },
+//   {
+     
+//      $sort: {
+//        label: -1
+//      }
+//   },
+
+  
+// ])
+
+
+db.ratings.aggregate([
+
+   
+   
+   {
+   $group: {
+     _id: "$order.product._id", avgRating:{$avg:"$rating"}
+     
+   }},
+   
+   { $project: { "productid": { "$toObjectId": "$_id" },avgRating:"$avgRating" } },
+{ $lookup: {
+    "localField": "productid",
+    "from": "products",
+    "foreignField": "_id",
+    "as": "product"
+  }},
+  { $limit: 5 },
+
+  {
+     
+     $sort: {
+       avgRating: -1
+     }
+  },
+
+   
+
+])
+
+// db.orders.aggregate([
+
+   
+//    {$match: {"product.sellerid": "63b97ed6e5238916e2a3d673"}},
+//    {
+//    $group: {
+//      _id: "$product.fabrictype" ,totalSales:{$sum:"$total"}
+     
+//    }},
+//      {
+   
+//     $project: {
+//       label:"$_id",
+//       value:"$totalSales"
+//     }
+//   },
+//     {
+     
+//      $sort: {
+//        value: -1
+//      }
+//   },
+   
+   
+
+   
+
+// ])
+
+
